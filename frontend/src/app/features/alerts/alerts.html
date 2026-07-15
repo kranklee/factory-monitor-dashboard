@@ -1,0 +1,127 @@
+<app-page-header title="Alerts" subtitle="Review and respond to active equipment conditions">
+  <button mat-stroked-button type="button" (click)="load()" [disabled]="loading()">
+    <mat-icon>refresh</mat-icon>
+    Refresh
+  </button>
+</app-page-header>
+
+<mat-card appearance="outlined" class="table-card">
+  <div class="filters">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-field">
+      <mat-label>Search alerts</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [formControl]="searchControl" placeholder="Alert or machine" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Status</mat-label>
+      <mat-select [formControl]="statusControl">
+        <mat-option value="">All statuses</mat-option>
+        <mat-option value="active">Active</mat-option>
+        <mat-option value="acknowledged">Acknowledged</mat-option>
+        <mat-option value="resolved">Resolved</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Severity</mat-label>
+      <mat-select [formControl]="severityControl">
+        <mat-option value="">All severities</mat-option>
+        <mat-option value="critical">Critical</mat-option>
+        <mat-option value="warning">Warning</mat-option>
+        <mat-option value="info">Info</mat-option>
+      </mat-select>
+    </mat-form-field>
+    @if (searchControl.value || statusControl.value || severityControl.value) {
+      <button mat-button type="button" (click)="clearFilters()">Clear</button>
+    }
+  </div>
+
+  @if (loading() && !alerts().length) {
+    <app-loading-state message="Loading alerts…" />
+  } @else if (error()) {
+    <div class="error-state" role="alert">
+      <mat-icon>cloud_off</mat-icon>
+      <span>{{ error() }}</span>
+      <button mat-button type="button" (click)="load()">Try again</button>
+    </div>
+  } @else if (!alerts().length) {
+    <app-empty-state
+      title="No alerts found"
+      message="No alert records match the selected filters."
+    />
+  } @else {
+    <div class="table-wrap" [class.table-wrap--loading]="loading()">
+      <table mat-table [dataSource]="alerts()">
+        <ng-container matColumnDef="severity">
+          <th mat-header-cell *matHeaderCellDef>Severity</th>
+          <td mat-cell *matCellDef="let alert"><app-status-badge [status]="alert.severity" /></td>
+        </ng-container>
+
+        <ng-container matColumnDef="alert">
+          <th mat-header-cell *matHeaderCellDef>Condition</th>
+          <td mat-cell *matCellDef="let alert" class="condition">
+            <app-status-badge class="condition__severity" [status]="alert.severity" />
+            <strong>{{ alert.title }}</strong>
+            <span>{{ alert.message }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="machine">
+          <th mat-header-cell *matHeaderCellDef>Machine</th>
+          <td mat-cell *matCellDef="let alert">
+            <strong class="machine-code">{{ alert.machine_code }}</strong>
+            <span class="machine-name">{{ alert.machine_name }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="detected">
+          <th mat-header-cell *matHeaderCellDef>Detected</th>
+          <td mat-cell *matCellDef="let alert">{{ alert.detected_at | date: 'MMM d, HH:mm' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let alert"><app-status-badge [status]="alert.status" /></td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef><span class="visually-hidden">Actions</span></th>
+          <td mat-cell *matCellDef="let alert" class="actions">
+            @if (alert.status === 'active') {
+              <button
+                mat-button
+                type="button"
+                [disabled]="updating().has(alert.id)"
+                (click)="updateStatus(alert, 'acknowledged')"
+              >
+                Acknowledge
+              </button>
+            }
+            @if (alert.status !== 'resolved') {
+              <button
+                mat-button
+                type="button"
+                [disabled]="updating().has(alert.id)"
+                (click)="updateStatus(alert, 'resolved')"
+              >
+                Resolve
+              </button>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  }
+
+  <mat-paginator
+    [length]="total()"
+    [pageIndex]="pageIndex()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[10, 20, 50]"
+    [disabled]="loading()"
+    showFirstLastButtons
+    (page)="pageChanged($event)"
+  />
+</mat-card>

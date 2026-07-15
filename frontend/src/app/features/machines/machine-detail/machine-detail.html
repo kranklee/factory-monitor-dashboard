@@ -1,0 +1,75 @@
+<a mat-button routerLink="/machines" class="back-link">
+  <mat-icon>arrow_back</mat-icon>
+  All machines
+</a>
+
+@if (loading()) {
+  <app-loading-state message="Loading machine details…" />
+} @else if (error()) {
+  <section class="error-state" role="alert">
+    <mat-icon>precision_manufacturing</mat-icon>
+    <h1>{{ error() }}</h1>
+    <a mat-flat-button routerLink="/machines">Return to machines</a>
+  </section>
+} @else if (machine(); as item) {
+  <app-page-header [title]="item.name" [subtitle]="item.code + ' · ' + item.location">
+    <app-status-badge [status]="item.status" />
+  </app-page-header>
+
+  <section class="metric-grid" aria-label="Current machine readings">
+    <mat-card appearance="outlined" class="metric-card">
+      <mat-icon>device_thermostat</mat-icon>
+      <span>Temperature</span>
+      <strong>{{ item.temperature_celsius | number: '1.1-1' }} °C</strong>
+    </mat-card>
+    <mat-card appearance="outlined" class="metric-card">
+      <mat-icon>vibration</mat-icon>
+      <span>Vibration</span>
+      <strong>{{ item.vibration_mm_s | number: '1.1-1' }} mm/s</strong>
+    </mat-card>
+    <mat-card appearance="outlined" class="metric-card">
+      <mat-icon>output</mat-icon>
+      <span>Output rate</span>
+      <strong>{{ item.output_rate | number: '1.0-1' }} units/h</strong>
+    </mat-card>
+    <mat-card appearance="outlined" class="metric-card">
+      <mat-icon>speed</mat-icon>
+      <span>Efficiency</span>
+      <strong>{{ item.efficiency_percent | number: '1.1-1' }}%</strong>
+    </mat-card>
+  </section>
+
+  <mat-card appearance="outlined" class="details-card">
+    <mat-card-header>
+      <mat-card-title>Equipment details</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <dl>
+        <div>
+          <dt>Equipment code</dt>
+          <dd>{{ item.code }}</dd>
+        </div>
+        <div>
+          <dt>Location</dt>
+          <dd>{{ item.location }}</dd>
+        </div>
+        <div>
+          <dt>Current status</dt>
+          <dd><app-status-badge [status]="item.status" /></dd>
+        </div>
+        <div>
+          <dt>Last telemetry</dt>
+          <dd>{{ item.last_seen_at | date: 'medium' }}</dd>
+        </div>
+        <div>
+          <dt>Added to system</dt>
+          <dd>{{ item.created_at | date: 'mediumDate' }}</dd>
+        </div>
+        <div>
+          <dt>Record updated</dt>
+          <dd>{{ item.updated_at | date: 'medium' }}</dd>
+        </div>
+      </dl>
+    </mat-card-content>
+  </mat-card>
+}

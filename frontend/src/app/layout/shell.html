@@ -1,0 +1,77 @@
+<mat-sidenav-container class="shell">
+  <mat-sidenav
+    #sidenav
+    class="sidebar"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="!isHandset()"
+    [fixedInViewport]="isHandset()"
+  >
+    <a class="brand" routerLink="/dashboard" aria-label="Factory Monitor dashboard">
+      <span class="brand__mark"><mat-icon>factory</mat-icon></span>
+      <span>
+        <strong>Factory Monitor</strong>
+        <small>Operations Console</small>
+      </span>
+    </a>
+
+    <mat-divider />
+
+    <nav aria-label="Primary navigation">
+      <mat-nav-list>
+        @for (item of navigation(); track item.route) {
+          <a
+            mat-list-item
+            [routerLink]="item.route"
+            routerLinkActive="active-link"
+            (click)="closeNavigation()"
+          >
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            <span matListItemTitle>{{ item.label }}</span>
+          </a>
+        }
+      </mat-nav-list>
+    </nav>
+
+    <div class="sidebar__footer">
+      <span class="connection-dot" aria-hidden="true"></span>
+      <span>System connected</span>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar class="topbar">
+      @if (isHandset()) {
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Open navigation"
+          (click)="sidenav.toggle()"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+      <span class="topbar__spacer"></span>
+      <button mat-button type="button" [matMenuTriggerFor]="userMenu" class="user-button">
+        <span class="avatar">{{ auth.user()?.full_name?.charAt(0) }}</span>
+        <span class="user-name">{{ auth.user()?.full_name }}</span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu" xPosition="before">
+        <div class="user-summary" role="presentation">
+          <strong>{{ auth.user()?.full_name }}</strong>
+          <span>{{ auth.user()?.email }}</span>
+          <span class="role">{{ auth.user()?.role }}</span>
+        </div>
+        <mat-divider />
+        <button mat-menu-item type="button" (click)="auth.logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Sign out</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <main class="content" tabindex="-1">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

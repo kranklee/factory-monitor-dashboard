@@ -1,0 +1,117 @@
+<app-page-header
+  title="Operations overview"
+  subtitle="Current production health across all monitored equipment"
+>
+  <button mat-stroked-button type="button" (click)="load()" [disabled]="loading()">
+    <mat-icon>refresh</mat-icon>
+    Refresh
+  </button>
+</app-page-header>
+
+@if (loading() && !summary()) {
+  <app-loading-state message="Loading factory status…" />
+} @else if (error()) {
+  <section class="error-panel" role="alert">
+    <mat-icon>cloud_off</mat-icon>
+    <div>
+      <h2>Unable to load dashboard</h2>
+      <p>{{ error() }}</p>
+      <button mat-flat-button type="button" (click)="load()">Try again</button>
+    </div>
+  </section>
+} @else if (summary(); as data) {
+  <section class="kpi-grid" aria-label="Key performance indicators">
+    <mat-card appearance="outlined" class="kpi-card">
+      <div class="kpi-card__icon kpi-card__icon--blue">
+        <mat-icon>precision_manufacturing</mat-icon>
+      </div>
+      <div>
+        <span class="kpi-card__label">Total machines</span>
+        <strong>{{ data.total_machines }}</strong>
+        <small>{{ data.operational_machines }} currently operational</small>
+      </div>
+    </mat-card>
+    <mat-card appearance="outlined" class="kpi-card">
+      <div class="kpi-card__icon kpi-card__icon--green"><mat-icon>speed</mat-icon></div>
+      <div>
+        <span class="kpi-card__label">Average efficiency</span>
+        <strong>{{ data.average_efficiency | number: '1.1-1' }}%</strong>
+        <small>Across connected equipment</small>
+      </div>
+    </mat-card>
+    <mat-card appearance="outlined" class="kpi-card">
+      <div class="kpi-card__icon kpi-card__icon--amber"><mat-icon>output</mat-icon></div>
+      <div>
+        <span class="kpi-card__label">Average output</span>
+        <strong>{{ data.average_output_rate | number: '1.1-1' }}</strong>
+        <small>Units per hour</small>
+      </div>
+    </mat-card>
+    <mat-card
+      appearance="outlined"
+      class="kpi-card"
+      [class.kpi-card--attention]="data.active_alerts"
+    >
+      <div class="kpi-card__icon kpi-card__icon--red">
+        <mat-icon>notification_important</mat-icon>
+      </div>
+      <div>
+        <span class="kpi-card__label">Open alerts</span>
+        <strong>{{ data.active_alerts }}</strong>
+        <small>Active and acknowledged</small>
+      </div>
+    </mat-card>
+  </section>
+
+  <section class="dashboard-grid">
+    <mat-card appearance="outlined" class="panel">
+      <mat-card-header>
+        <mat-card-title>Machine status</mat-card-title>
+        <mat-card-subtitle>Fleet distribution by current state</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="status-list">
+          @for (item of data.status_counts; track item.status) {
+            <div class="status-row">
+              <div class="status-row__header">
+                <app-status-badge [status]="item.status" />
+                <span
+                  >{{ item.count }} · {{ statusPercent(item.count, data.total_machines) }}%</span
+                >
+              </div>
+              <div class="status-track" aria-hidden="true">
+                <span
+                  [class]="'status-fill status-fill--' + item.status"
+                  [style.width.%]="statusPercent(item.count, data.total_machines)"
+                ></span>
+              </div>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="panel recent-alerts">
+      <mat-card-header>
+        <mat-card-title>Recent alerts</mat-card-title>
+        <mat-card-subtitle>Latest conditions requiring attention</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        @for (alert of data.recent_alerts; track alert.id) {
+          <article class="alert-item">
+            <div class="alert-item__heading">
+              <strong>{{ alert.title }}</strong>
+              <app-status-badge [status]="alert.severity" />
+            </div>
+            <p>{{ alert.machine_code }} · {{ alert.machine_name }}</p>
+            <time [dateTime]="alert.detected_at">{{
+              alert.detected_at | date: 'MMM d, HH:mm'
+            }}</time>
+          </article>
+        } @empty {
+          <p class="no-alerts">No recent alerts. Factory conditions are normal.</p>
+        }
+      </mat-card-content>
+    </mat-card>
+  </section>
+}

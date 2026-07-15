@@ -1,0 +1,157 @@
+.login-page {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-columns: minmax(20rem, 1fr) minmax(28rem, 1fr);
+  background: #f4f6f7;
+}
+
+.intro {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(2rem, 6vw, 5rem);
+  box-sizing: border-box;
+  background: #182a35;
+  color: #f4f7f8;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.brand__mark {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 0.5rem;
+  background: #dce8ef;
+  color: #1b465d;
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+  color: #8fc1d5;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 38rem;
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 4.25rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+.intro__copy {
+  max-width: 34rem;
+  margin: 1.5rem 0 0;
+  color: #bdcbd3;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.intro__footer {
+  margin: 0;
+  color: #879aa5;
+  font-size: 0.8rem;
+}
+
+.form-panel {
+  display: grid;
+  min-height: 100dvh;
+  padding: 2rem;
+  place-items: center;
+  box-sizing: border-box;
+}
+
+.login-card {
+  width: min(100%, 28rem);
+  padding: 1.25rem;
+  border-color: var(--app-border);
+  background: #ffffff;
+  box-shadow: 0 1rem 3rem rgb(20 36 48 / 8%);
+}
+
+mat-card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+mat-card-content {
+  padding-top: 1.5rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.submit {
+  height: 3rem;
+  margin-top: 0.5rem;
+}
+
+.submit mat-spinner {
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #e6b9b9;
+  border-radius: 0.4rem;
+  background: #fceaea;
+  color: #842828;
+  font-size: 0.85rem;
+}
+
+.demo-note {
+  display: flex;
+  margin-top: 1.5rem;
+  padding: 0.8rem;
+  border-radius: 0.4rem;
+  flex-direction: column;
+  background: #f3f6f8;
+  color: var(--app-text-secondary);
+  font-size: 0.78rem;
+}
+
+.demo-note strong {
+  margin-bottom: 0.2rem;
+  color: var(--app-text-primary);
+}
+
+@media (max-width: 850px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .intro {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-panel {
+    padding: 1rem;
+  }
+
+  .login-card {
+    padding: 0.5rem;
+  }
+}

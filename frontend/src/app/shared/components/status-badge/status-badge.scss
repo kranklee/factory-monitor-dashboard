@@ -1,0 +1,41 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: 0 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.badge--operational,
+.badge--resolved {
+  border-color: #b8dcc8;
+  background: #e8f5ed;
+  color: #1b6540;
+}
+
+.badge--warning,
+.badge--acknowledged {
+  border-color: #ebd19e;
+  background: #fff7e1;
+  color: #7a5310;
+}
+
+.badge--critical,
+.badge--active {
+  border-color: #e6b9b9;
+  background: #fceaea;
+  color: #942c2c;
+}
+
+.badge--offline,
+.badge--info {
+  border-color: #ccd2d8;
+  background: #eff1f3;
+  color: #4e5965;
+}

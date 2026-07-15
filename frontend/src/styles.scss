@@ -1,0 +1,61 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+:root {
+  --app-background: #f3f5f6;
+  --app-surface: #ffffff;
+  --app-border: #dfe4e7;
+  --app-text-primary: #17232c;
+  --app-text-secondary: #64727c;
+  --app-radius: 0.65rem;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color-scheme: light;
+  background-color: var(--app-background);
+  color: var(--app-text-primary);
+  font: var(--mat-sys-body-medium);
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+button,
+a,
+input,
+select {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid #5f91aa;
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  margin: -1px;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
