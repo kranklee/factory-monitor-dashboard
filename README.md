@@ -272,6 +272,10 @@ factory-monitor-dashboard/
 |-- render.yaml
 `-- README.md
 ```
+<img width="1848" height="930" alt="image" src="https://github.com/user-attachments/assets/c02c74e2-f61b-4a74-a6ca-1b8cd1c555fe" />
+
+
+
 
 ## Troubleshooting
 
