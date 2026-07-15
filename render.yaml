@@ -6,9 +6,6 @@ services:
     region: oregon
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    dockerCommand: >-
-      sh -c 'alembic upgrade head && python -m app.seed && exec uvicorn app.main:app
-      --host 0.0.0.0 --port "$PORT"'
     healthCheckPath: /health
     autoDeployTrigger: checksPass
     envVars:
