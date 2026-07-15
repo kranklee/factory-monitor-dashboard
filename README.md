@@ -277,7 +277,8 @@ factory-monitor-dashboard/
 <img width="1816" height="915" alt="image" src="https://github.com/user-attachments/assets/f09ccab7-f8fc-4a1d-aff5-3cdab7eee8c4" />
 
 <img width="1835" height="903" alt="image" src="https://github.com/user-attachments/assets/d039e273-c678-41a8-8f39-8be4dfdfd430" />
-<img width="1867" height="975" alt="image" src="https://github.com/user-attachments/assets/e088f2b6-7f64-4f96-ab42-38787941c32b" />
+
+<img width="1833" height="814" alt="image" src="https://github.com/user-attachments/assets/e52cacba-e894-488b-93f5-446258c3d85b" />
 
 
 ## Troubleshooting
